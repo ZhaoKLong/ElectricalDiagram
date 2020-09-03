@@ -40,7 +40,7 @@ import com.mxgraph.view.mxCellState;
  * To control this editor, use mxGraph.invokesStopCellEditing, mxGraph.
  * enterStopsCellEditing and mxGraph.escapeEnabled.
  */
-public class mxCellEditor implements mxICellEditor
+	public class mxCellEditor implements mxICellEditor
 {
 
 	/**
