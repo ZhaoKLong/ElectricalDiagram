@@ -6,8 +6,7 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import com.mxgraph.examples.swing.editor.TestEditorPalette;
 import org.w3c.dom.Document;
@@ -50,6 +49,7 @@ public class Test extends BasicGraphEditor {
         final mxGraph graph = graphComponent.getGraph();
         EditorPalette shapesPalette = insertPalette(mxResources.get("shapes"));
         TestEditorPalette treePalette = insertTree("线路");
+        addTreeToLibrary("树", new TreePopupMenu());
         shapesPalette.addListener(mxEvent.SELECT, new mxIEventListener() {
             public void invoke(Object sender, mxEventObject evt) {
                 Object tmp = evt.getProperty("transferable");

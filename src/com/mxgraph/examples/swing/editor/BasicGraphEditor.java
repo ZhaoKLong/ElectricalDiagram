@@ -13,12 +13,10 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 
 import com.mxgraph.examples.swing.Test;
+import com.mxgraph.examples.swing.TreePopupMenu;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.layout.mxEdgeLabelLayout;
@@ -261,6 +259,10 @@ public class BasicGraphEditor extends JPanel {
 
     String nodeName = null; //原有节点名称
 
+    public void addTreeToLibrary(String title, JScrollPane jScrollPane) {
+        libraryPane.add(title, jScrollPane);
+    }
+
     public TestEditorPalette insertTree(String title) {
         final JLabel label;
 
@@ -321,8 +323,7 @@ public class BasicGraphEditor extends JPanel {
         treeModel = (DefaultTreeModel) tree.getModel();//下面两行取得DefaultTreeModel,并检测是否有TreeModelEvent事件
 //        treeModel.addTreeModelListener();
 
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(tree);
+        JScrollPane scrollPane = new JScrollPane(tree);
 
         label = new JLabel("更改数据为: ");
         JButton b1 = new JButton("增加节点");
@@ -331,8 +332,8 @@ public class BasicGraphEditor extends JPanel {
         con.add(b1);
         con.add(b2);
         con.add(label);
-        libraryPane.add(scrollPane, BorderLayout.CENTER);
-        libraryPane.add(con, BorderLayout.SOUTH);
+        libraryPane.add("1", scrollPane);
+        libraryPane.add("2", con);
 //        f.pack();
 //        f.setVisible(true);
 //        f.addWindowListener(new WindowAdapter() {
