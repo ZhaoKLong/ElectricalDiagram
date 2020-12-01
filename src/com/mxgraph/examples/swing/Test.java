@@ -1,18 +1,9 @@
 package com.mxgraph.examples.swing;
 
-import java.awt.Color;
-import java.awt.Point;
-import java.net.URL;
-import java.text.NumberFormat;
-import java.util.Iterator;
-import java.util.List;
-import javax.swing.*;
-
-import com.mxgraph.examples.swing.editor.TestEditorPalette;
-import org.w3c.dom.Document;
 import com.mxgraph.examples.swing.editor.BasicGraphEditor;
 import com.mxgraph.examples.swing.editor.EditorMenuBar;
 import com.mxgraph.examples.swing.editor.EditorPalette;
+import com.mxgraph.examples.swing.editor.TestEditorPalette;
 import com.mxgraph.io.mxCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
@@ -21,15 +12,17 @@ import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxGraphTransferable;
 import com.mxgraph.swing.util.mxSwingConstants;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
+import com.mxgraph.util.*;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
-import com.mxgraph.util.mxPoint;
-import com.mxgraph.util.mxResources;
-import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
+import org.w3c.dom.Document;
+
+import javax.swing.*;
+import java.awt.*;
+import java.text.NumberFormat;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @description: 测试
@@ -41,6 +34,7 @@ public class Test extends BasicGraphEditor {
     public static final NumberFormat numberFormat = NumberFormat.getInstance();
 
     public Test() {
+//        this("修改测试", new CustomGraphComponent(new CustomGraph()));
         this("修改测试", new CustomGraphComponent(new CustomGraph()));
     }
 

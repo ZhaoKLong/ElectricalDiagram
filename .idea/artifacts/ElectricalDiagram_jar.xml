@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ElectricalDiagram:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/ElectricalDiagram_jar</output-path>
+    <root id="archive" name="ElectricalDiagram.jar">
+      <element id="module-output" name="ElectricalDiagram" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.2/commons-io-2.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/alibaba/fastjson/1.2.28/fastjson-1.2.28.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
