@@ -17,31 +17,36 @@ public class Util {
     public static String localText;
 
     public static String getLocalTxt(String path) {
+        if ("".equals(path) || path == null) {
+            localText = "";
+        } else {
 //        File file = new File("G:\\graphDemo\\ElectricalDiagram\\testdata.txt");  //源文本
-        File file = new File(path);  //源文本
+//        File file = new File("D:\\work\\javaWorkSapce\\ElectricalDiagram\\src\\com\\mxgraph\\examples\\swing\\testdata.txt");  //源文本
+            File file = new File(path);  //源文本
 //        File file = new File("D:\\code.txt");  //代码+标记文本
-        BufferedReader br = null;
-        StringBuffer sb = null;
-        try {
-            //在字节流的基础上套用InputStreamReader转换为字符流
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file.getPath()), "UTF-8"));
-            sb = new StringBuffer();
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+            BufferedReader br = null;
+            StringBuffer sb = null;
             try {
-                br.close();
+                //在字节流的基础上套用InputStreamReader转换为字符流
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(file.getPath()), "UTF-8"));
+                sb = new StringBuffer();
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    br.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            //打印文件的所有内容
+            // String LocalTxt存放本地文件中的json数据
+            localText = new String(sb);
         }
-        //打印文件的所有内容
-        // String LocalTxt存放本地文件中的json数据
-        localText = new String(sb);
         return localText;
     }
 
@@ -56,32 +61,34 @@ public class Util {
         double minlo = 180;    //最小经度
         double maxlo = 0;      //最大经度
         JSONArray objects1 = JSONArray.parseArray(localText);
-        int length = objects1.size();
-        for (int i = 0; i < length; i++) {
-            JSONObject item = objects1.getJSONObject(i);
-            if (Double.parseDouble((String) item.getJSONObject("prev").get("latitude")) < minla) {
-                minla = Double.parseDouble((String) item.getJSONObject("prev").get("latitude"));
-            }
-            if (Double.parseDouble((String) item.getJSONObject("prev").get("latitude")) > maxla) {
-                maxla = Double.parseDouble((String) item.getJSONObject("prev").get("latitude"));
-            }
-            if (Double.parseDouble((String) item.getJSONObject("next").get("latitude")) < minla) {
-                minla = Double.parseDouble((String) item.getJSONObject("next").get("latitude"));
-            }
-            if (Double.parseDouble((String) item.getJSONObject("next").get("latitude")) > maxla) {
-                maxla = Double.parseDouble((String) item.getJSONObject("next").get("latitude"));
-            }
-            if (Double.parseDouble((String) item.getJSONObject("prev").get("longitude")) < minlo) {
-                minlo = Double.parseDouble((String) item.getJSONObject("prev").get("longitude"));
-            }
-            if (Double.parseDouble((String) item.getJSONObject("prev").get("longitude")) > maxlo) {
-                maxlo = Double.parseDouble((String) item.getJSONObject("prev").get("longitude"));
-            }
-            if (Double.parseDouble((String) item.getJSONObject("next").get("longitude")) < minlo) {
-                minlo = Double.parseDouble((String) item.getJSONObject("next").get("longitude"));
-            }
-            if (Double.parseDouble((String) item.getJSONObject("next").get("longitude")) > maxlo) {
-                maxlo = Double.parseDouble((String) item.getJSONObject("next").get("longitude"));
+        if (null != objects1) {
+            int length = objects1.size();
+            for (int i = 0; i < length; i++) {
+                JSONObject item = objects1.getJSONObject(i);
+                if (Double.parseDouble((String) item.getJSONObject("prev").get("latitude")) < minla) {
+                    minla = Double.parseDouble((String) item.getJSONObject("prev").get("latitude"));
+                }
+                if (Double.parseDouble((String) item.getJSONObject("prev").get("latitude")) > maxla) {
+                    maxla = Double.parseDouble((String) item.getJSONObject("prev").get("latitude"));
+                }
+                if (Double.parseDouble((String) item.getJSONObject("next").get("latitude")) < minla) {
+                    minla = Double.parseDouble((String) item.getJSONObject("next").get("latitude"));
+                }
+                if (Double.parseDouble((String) item.getJSONObject("next").get("latitude")) > maxla) {
+                    maxla = Double.parseDouble((String) item.getJSONObject("next").get("latitude"));
+                }
+                if (Double.parseDouble((String) item.getJSONObject("prev").get("longitude")) < minlo) {
+                    minlo = Double.parseDouble((String) item.getJSONObject("prev").get("longitude"));
+                }
+                if (Double.parseDouble((String) item.getJSONObject("prev").get("longitude")) > maxlo) {
+                    maxlo = Double.parseDouble((String) item.getJSONObject("prev").get("longitude"));
+                }
+                if (Double.parseDouble((String) item.getJSONObject("next").get("longitude")) < minlo) {
+                    minlo = Double.parseDouble((String) item.getJSONObject("next").get("longitude"));
+                }
+                if (Double.parseDouble((String) item.getJSONObject("next").get("longitude")) > maxlo) {
+                    maxlo = Double.parseDouble((String) item.getJSONObject("next").get("longitude"));
+                }
             }
         }
         return new double[]{minlo, maxlo, minla, maxla};
@@ -103,10 +110,12 @@ public class Util {
      */
     public static List<JSONObject> getAllCable() {
         JSONArray objects1 = JSONArray.parseArray(localText);
-        int length = objects1.size();
         List<JSONObject> list = new ArrayList<>();
-        for (int i = 0; i < length; i++) {
-            list.add(objects1.getJSONObject(i));
+        if (null != objects1) {
+            int length = objects1.size();
+            for (int i = 0; i < length; i++) {
+                list.add(objects1.getJSONObject(i));
+            }
         }
         return list;
     }

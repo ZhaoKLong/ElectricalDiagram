@@ -47,7 +47,8 @@ public class EditorPalette extends JPanel {
     @SuppressWarnings("serial")
     public EditorPalette() {
         // 设置背景颜色
-        setBackground(new Color(149, 230, 190));
+//        setBackground(new Color(149, 230, 190));
+        setBackground(Color.white);
         // 设置布局方式（流式布局）
         setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
         // 添加鼠标事件监听

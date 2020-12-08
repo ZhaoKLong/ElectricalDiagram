@@ -66,7 +66,7 @@ public class ImageChange {
         at.rotate(ang, w / 2.0, h / 2.0);//旋转图象
         at.translate(x, y);
 //        at.translate(-x, -y);
-        AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+        AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         op.filter(image, rotatedImage);
         image = rotatedImage;
 

@@ -1,5 +1,8 @@
 package com.mxgraph.examples.swing.editor;
 
+import com.mxgraph.examples.swing.MyPanel;
+import com.mxgraph.examples.swing.MyScrollPane;
+import com.mxgraph.examples.swing.MyTable;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.layout.*;
 import com.mxgraph.swing.handler.mxKeyboardHandler;
@@ -35,8 +38,8 @@ public class BasicGraphEditor extends JPanel {
      */
     static {
         try {
-            mxResources.add("com/mxgraph/examples/swing/resources/editor");
-//            mxResources.add("com/mxgraph/examples/swing/resources/editor_zh-CN");
+//            mxResources.add("com/mxgraph/examples/swing/resources/editor");
+            mxResources.add("com/mxgraph/examples/swing/resources/editor_zh-CN");
         } catch (Exception e) {
             // ignore
         }
@@ -111,7 +114,7 @@ public class BasicGraphEditor extends JPanel {
     /**
      *
      */
-    public BasicGraphEditor(String appTitle, mxGraphComponent component) {
+    public BasicGraphEditor(String appTitle, mxGraphComponent component, String path) {
         // Stores and updates the frame title
         this.appTitle = appTitle;
         // Stores a reference to the graph and creates the command history
@@ -135,6 +138,7 @@ public class BasicGraphEditor extends JPanel {
         undoManager.addListener(mxEvent.UNDO, undoHandler);
         undoManager.addListener(mxEvent.REDO, undoHandler);
         // Creates the graph outline component
+//        graphOutline = new mxGraphOutline(graphComponent);
         graphOutline = new mxGraphOutline(graphComponent);
         // Creates the library pane that contains the tabs with the palettes
         libraryPane = new JTabbedPane();
@@ -147,9 +151,14 @@ public class BasicGraphEditor extends JPanel {
         inner.setBorder(null);
         // Creates the outer split pane that contains the inner split pane and
         // the graph component on the right side of the window
-        JSplitPane outer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inner, graphComponent);
+//        JSplitPane outer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inner, graphComponent);
+        JSplitPane mid = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inner, MyScrollPane.getMyScrollPane(path));
+        mid.setDividerLocation(200);
+        mid.setDividerSize(6);
+        mid.setBorder(null);
+        JSplitPane outer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mid, MyTable.getMyTable(path));
         outer.setOneTouchExpandable(true);
-        outer.setDividerLocation(200);
+        outer.setDividerLocation(1000);
         outer.setDividerSize(6);
         outer.setBorder(null);
         // Creates the status bar
@@ -720,9 +729,11 @@ public class BasicGraphEditor extends JPanel {
         frame.getContentPane().add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(menuBar);
-        frame.setSize(870, 640);
+        frame.setSize(1200, 690);
+        frame.setLocationRelativeTo(null);
         // Updates the frame title
-        updateTitle();
+//        updateTitle();
+        frame.setTitle("测试");
         return frame;
     }
 

@@ -55,7 +55,7 @@ public class SchemaEditor extends BasicGraphEditor
 				return null;
 			}
 
-		});
+		},"");
 
 		// Creates a single shapes palette
 		EditorPalette shapesPalette = insertPalette("Schema");

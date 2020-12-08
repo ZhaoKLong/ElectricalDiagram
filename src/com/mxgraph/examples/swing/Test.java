@@ -33,17 +33,19 @@ public class Test extends BasicGraphEditor {
 
     public static final NumberFormat numberFormat = NumberFormat.getInstance();
 
-    public Test() {
-//        this("修改测试", new CustomGraphComponent(new CustomGraph()));
-        this("修改测试", new CustomGraphComponent(new CustomGraph()));
+    static Test editor;
+
+    static JFrame frame;
+
+    public Test(String path) {
+        this("修改测试", new CustomGraphComponent(new CustomGraph()), path);
     }
 
-    public Test(String appTitle, mxGraphComponent component) {
-        super(appTitle, component);
+    public Test(String appTitle, mxGraphComponent component, String path) {
+        super(appTitle, component, path);
         final mxGraph graph = graphComponent.getGraph();
-        EditorPalette shapesPalette = insertPalette(mxResources.get("shapes"));
-        TestEditorPalette treePalette = insertTree("线路");
-        addTreeToLibrary("树", new TreePopupMenu());
+        EditorPalette shapesPalette = insertPalette("绘图");
+        addTreeToLibrary("线路", new TreePopupMenu());
         shapesPalette.addListener(mxEvent.SELECT, new mxIEventListener() {
             public void invoke(Object sender, mxEventObject evt) {
                 Object tmp = evt.getProperty("transferable");
@@ -56,26 +58,17 @@ public class Test extends BasicGraphEditor {
                 }
             }
         });
-        shapesPalette.addTemplate("Container", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/swimlane.png")), "swimlane", 280, 280, "Container");
-        shapesPalette.addTemplate("Icon", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/rounded.png")), "icon;image=/com/mxgraph/examples/swing/images/wrench.png", 70, 70, "Icon");
-        shapesPalette.addTemplate("Label", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/rounded.png")), "label;image=/com/mxgraph/examples/swing/images/gear.png", 130, 50, "Label");
-        shapesPalette.addTemplate("Rectangle", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/rectangle.png")), null, 160, 120, "");
-        shapesPalette.addTemplate("Rounded Rectangle", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/rounded.png")), "rounded=1", 160, 120, "");
-        shapesPalette.addTemplate("Double Rectangle", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/doublerectangle.png")), "rectangle;shape=doubleRectangle", 160, 120, "");
-        shapesPalette.addTemplate("Ellipse", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/ellipse.png")), "ellipse", 160, 160, "");
-        shapesPalette.addTemplate("Double Ellipse", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/doubleellipse.png")), "ellipse;shape=doubleEllipse", 160, 160, "");
-        shapesPalette.addTemplate("Triangle", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/triangle.png")), "triangle", 120, 160, "");
-        shapesPalette.addTemplate("Rhombus", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/rhombus.png")), "rhombus", 160, 160, "");
-        shapesPalette.addTemplate("Horizontal Line", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/hline.png")), "line", 160, 10, "");
-        shapesPalette.addTemplate("Hexagon", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/hexagon.png")), "shape=hexagon", 160, 120, "");
-        shapesPalette.addTemplate("Cylinder", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/cylinder.png")), "shape=cylinder", 120, 160, "");
-        shapesPalette.addTemplate("Actor", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/actor.png")), "shape=actor", 120, 160, "");
-        shapesPalette.addTemplate("Cloud", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/cloud.png")), "ellipse;shape=cloud", 160, 120, "");
-        shapesPalette.addEdgeTemplate("Straight", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/straight.png")), "straight", 120, 120, "");
-        shapesPalette.addEdgeTemplate("Horizontal Connector", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/connect.png")), null, 100, 100, "");
-        shapesPalette.addEdgeTemplate("Vertical Connector", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/vertical.png")), "vertical", 100, 100, "");
-        shapesPalette.addEdgeTemplate("Entity Relation", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/entity.png")), "entity", 100, 100, "");
-        shapesPalette.addEdgeTemplate("Arrow", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/examples/swing/images/arrow.png")), "arrow", 120, 120, "");
+        shapesPalette.addTemplate("公变", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/publicTransformer.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("专变", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/purposeTransformer.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("断路器", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/circuitBreaker.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("隔离刀闸", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/breaker.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("负荷开关", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/loadSwitch.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("分支箱", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/branchBox.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("箱变(专变)", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/boxChange.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("箱变(公变)", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/boxChangePublic.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("故障指示器", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/faultIndicator.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("环网柜", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/ringNetworkCabinet.png")), "swimlane", 280, 280, "Container");
+        shapesPalette.addTemplate("跌落式熔断器", new ImageIcon(GraphEditor.class.getResource("/com/mxgraph/util/image/dropFuse.png")), "swimlane", 280, 280, "Container");
     }
 
     public static class CustomGraphComponent extends mxGraphComponent {
@@ -261,8 +254,17 @@ public class Test extends BasicGraphEditor {
         mxConstants.W3C_SHADOWCOLOR = "#D3D3D3";
 
         // 创建窗口实例并添加基础内容
-        Test editor = new Test();
+        editor = new Test("");
         // 添加菜单栏并展现窗口
-        editor.createFrame(new EditorMenuBar(editor)).setVisible(true);
+        frame = editor.createFrame(new EditorMenuBar(editor));
+        frame.setVisible(true);
+    }
+
+    public static void changePath(String path) {
+        frame.setVisible(false);
+        editor = new Test(path);
+        // 添加菜单栏并展现窗口
+        frame = editor.createFrame(new EditorMenuBar(editor));
+        frame.setVisible(true);
     }
 }
