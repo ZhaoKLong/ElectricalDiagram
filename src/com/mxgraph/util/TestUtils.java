@@ -1,7 +1,6 @@
 package com.mxgraph.util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -34,11 +33,30 @@ public class TestUtils {
 
     public TestUtils() {
         File inputFile = new File("src/com/mxgraph/util/测试线路.txt");
-        try {
-            inNext = new Scanner(inputFile).next();
-        } catch (FileNotFoundException e) {
+        if (inputFile.isFile() && inputFile.exists()) { //判断文件是否存在
+            try {
+                InputStreamReader read = new InputStreamReader(new FileInputStream(inputFile), "utf-8");//考虑到编码格式
+                BufferedReader bufferedReader = new BufferedReader(read);
+                inNext = bufferedReader.readLine();
+                read.close();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        } else {
             inNext = "";
+            System.err.println("路径错误");
         }
+//        File inputFile = new File("src/com/mxgraph/util/测试线路.txt");
+//        File newFile = new File("");
+//        String absolutePath = newFile.getAbsolutePath();
+//        String s = absolutePath.replaceAll("\\\\", "/");
+//        System.out.println(s + "/src/com/mxgraph/util/测试线路.txt");
+//        File inputFile = new File(s + "/src/com/mxgraph/util/测试线路.txt");
+//        try {
+//            inNext = new Scanner(inputFile).next();
+//        } catch (FileNotFoundException e) {
+//            inNext = "";
+//        }
         if (!"".equals(inNext) && null != inNext) {
             jsonArray = JSON.parseArray(inNext);
             for (int i = 0; i < jsonArray.size(); i++) {
@@ -120,9 +138,9 @@ public class TestUtils {
         for (Trunkline trunklineItem : trunklineList) {
             if (trunklineItem.getName().equals(trunklineName)) {
                 tunkline = trunklineItem;
-            }else if(null!=trunklineItem.getChildren()&&trunklineItem.getChildren().size()!=0){
-                for (Trunkline trunklineChild:trunklineItem.getChildren()) {
-                    if(trunklineChild.getName().equals(trunklineName)){
+            } else if (null != trunklineItem.getChildren() && trunklineItem.getChildren().size() != 0) {
+                for (Trunkline trunklineChild : trunklineItem.getChildren()) {
+                    if (trunklineChild.getName().equals(trunklineName)) {
                         tunkline = trunklineChild;
                     }
                 }

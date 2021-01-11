@@ -107,6 +107,7 @@ public class Main {
             if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = jfc.getSelectedFile();
                 if (file.isFile()) {
+                    System.out.println(file.getAbsolutePath());
                     getLocalTxt(file.getAbsolutePath());
                     this.remove(open);
                     initFrame();
