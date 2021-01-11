@@ -24,9 +24,9 @@ import static com.mxgraph.examples.swing.Util.*;
 public class MyPanel extends JPanel {
 
     private static final int Margin = 20;
-    private static final int LineWidth = 1;
-    private static final int ImageSize = 16;
-    private static final int FontSize = 3;
+    private static final double LineWidth = 0.3;
+    private static final int ImageSize = 2;
+    private static final double FontSize = 0.8;
     private static final int LocalScale = 116987;
 
     private Dimension preferredSize = new Dimension(800 - 19, 600 - 42);
@@ -142,21 +142,39 @@ public class MyPanel extends JPanel {
                 );
                 g2d.setStroke(bs1);
             }
-            JSONArray objectEquipment = cable.getJSONObject("prev").getJSONArray("equipmentList");
+            JSONArray prevEquipment = cable.getJSONObject("prev").getJSONArray("equipmentList");
             String filepath = "";
             int size = 0;
-            if (null != objectEquipment) {
-                size = objectEquipment.size();
+            if (null != prevEquipment) {
+                size = prevEquipment.size();
             }
             if (size > 0) {
                 for (int i = 0; i < size; i++) {
-                    int type = (int) objectEquipment.getJSONObject(i).get("type");
+                    int type = (int) prevEquipment.getJSONObject(i).get("type");
+//                    System.out.println(type);
                     filepath = getIconPath(type);
                     double degree = getDegree(Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0], localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude")), Double.parseDouble((String) cable.getJSONObject("next").get("longitude")) - localBorder[0], localBorder[3] - Double.parseDouble((String) cable.getJSONObject("next").get("latitude")));
-                    double[] offset = getOffset(degree, (scale * length * ImageSize) / (LocalScale * 800), cable, i);
+                    double[] offset = getOffset(degree, (scale * length * ImageSize) / (LocalScale * 800), cable, i,true);
                     // 绘制图片（如果宽高传的不是图片原本的宽高, 则图片将会适当缩放绘制）
                     drawImage(g2d, filepath, degree, (int) ((Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0]) * scale + Margin + offset[0]),
                             (int) ((localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude"))) * scale + Margin + offset[1]));
+                }
+            }
+            JSONArray nextEquipment = cable.getJSONObject("next").getJSONArray("equipmentList");
+            String nextFilepath = "";
+            int nextSize = 0;
+            if (null != nextEquipment) {
+                nextSize = nextEquipment.size();
+            }
+            if (nextSize > 0) {
+                for (int i = 0; i < nextSize; i++) {
+                    int type = (int) nextEquipment.getJSONObject(i).get("type");
+                    nextFilepath = getIconPath(type);
+                    double degree = getDegree(Double.parseDouble((String) cable.getJSONObject("next").get("longitude")) - localBorder[0], localBorder[3] - Double.parseDouble((String) cable.getJSONObject("next").get("latitude")), Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0], localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude")));
+                    double[] offset = getOffset(degree, (scale * length * ImageSize) / (LocalScale * 800), cable, i,false);
+                    // 绘制图片（如果宽高传的不是图片原本的宽高, 则图片将会适当缩放绘制）
+                    drawImage(g2d, nextFilepath, degree, (int) ((Double.parseDouble((String) cable.getJSONObject("next").get("longitude")) - localBorder[0]) * scale + Margin + offset[0]),
+                            (int) ((localBorder[3] - Double.parseDouble((String) cable.getJSONObject("next").get("latitude"))) * scale + Margin + offset[1]));
                 }
             }
         }

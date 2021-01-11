@@ -178,7 +178,7 @@ public class Util {
      * @param degree
      * @return
      */
-    public static double[] getOffset(double degree, double realScale, JSONObject cable, int i) {
+    public static double[] getOffset(double degree, double realScale, JSONObject cable, int i, boolean isToPoleId) {
         double realDegree = degree * Math.PI / 180;
         double tan = Math.tan(realDegree);
         double cos = Math.cos(realDegree);
@@ -187,8 +187,15 @@ public class Util {
         double v;
         double x = 0;
         double y = 0;
-        double prevLa = (Double.parseDouble((String) cable.getJSONObject("prev").get("latitude")));
-        double nextLa = (Double.parseDouble((String) cable.getJSONObject("next").get("latitude")));
+        double prevLa = 0;
+        double nextLa = 0;
+        if (isToPoleId) {
+            prevLa = (Double.parseDouble((String) cable.getJSONObject("prev").get("latitude")));
+            nextLa = (Double.parseDouble((String) cable.getJSONObject("next").get("latitude")));
+        } else {
+            prevLa = (Double.parseDouble((String) cable.getJSONObject("next").get("latitude")));
+            nextLa = (Double.parseDouble((String) cable.getJSONObject("prev").get("latitude")));
+        }
         if (tan < 0) {
             v = -((realScale / 2) * (1 - tan)) / (Math.sqrt(tan * tan + 1));
             if (prevLa > nextLa) {

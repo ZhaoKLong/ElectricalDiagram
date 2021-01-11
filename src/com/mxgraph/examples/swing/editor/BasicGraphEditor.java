@@ -732,7 +732,7 @@ public class BasicGraphEditor extends JPanel {
         frame.setLocationRelativeTo(null);
         // Updates the frame title
 //        updateTitle();
-        frame.setTitle("测试");
+        frame.setTitle("输配电管理系统");
         return frame;
     }
 

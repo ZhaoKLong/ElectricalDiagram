@@ -240,7 +240,7 @@ public class Main {
                         int type = (int) objectEquipment.getJSONObject(i).get("type");
                         filepath = getIconPath(type);
                         double degree = getDegree(Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0], localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude")), Double.parseDouble((String) cable.getJSONObject("next").get("longitude")) - localBorder[0], localBorder[3] - Double.parseDouble((String) cable.getJSONObject("next").get("latitude")));
-                        double[] offset = getOffset(degree, scale, cable, i);
+                        double[] offset = getOffset(degree, scale, cable, i, false);
                         // 绘制图片（如果宽高传的不是图片原本的宽高, 则图片将会适当缩放绘制）
                         drawImage(g2d, filepath, degree, (int) ((Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0]) * scale + Margin + offset[0]),
                                 (int) ((localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude"))) * scale + Margin + offset[1]));
