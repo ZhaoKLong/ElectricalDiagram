@@ -14,9 +14,9 @@ import java.util.List;
 public class Util {
     //经度   longitude
     //纬度   latitude
-    public static String localText;
+    private static String localText;
 
-    public static String getLocalTxt(String path) {
+    static String getLocalTxt(String path) {
         if ("".equals(path) || path == null) {
             localText = "";
         } else {
@@ -55,16 +55,15 @@ public class Util {
      *
      * @return List
      */
-    public static double[] getLocalBorder() {
+    public static double[] getLocalBorder(JSONArray jsonArray) {
         double minla = 180;    //最小纬度
         double maxla = 0;      //最大纬度
         double minlo = 180;    //最小经度
         double maxlo = 0;      //最大经度
-        JSONArray objects1 = JSONArray.parseArray(localText);
-        if (null != objects1) {
-            int length = objects1.size();
+        if (null != jsonArray) {
+            int length = jsonArray.size();
             for (int i = 0; i < length; i++) {
-                JSONObject item = objects1.getJSONObject(i);
+                JSONObject item = jsonArray.getJSONObject(i);
                 if (Double.parseDouble((String) item.getJSONObject("prev").get("latitude")) < minla) {
                     minla = Double.parseDouble((String) item.getJSONObject("prev").get("latitude"));
                 }
@@ -97,7 +96,7 @@ public class Util {
     /**
      * 计算画幅大小，经纬度与像素比例
      */
-    public static void pictureSize() {
+    public static void pictureSize(JSONArray jsonArray) {
         JSONArray objects1 = JSONArray.parseArray(localText);
         //TODO
         System.err.println(objects1);
@@ -108,13 +107,12 @@ public class Util {
      *
      * @return List
      */
-    public static List<JSONObject> getAllCable() {
-        JSONArray objects1 = JSONArray.parseArray(localText);
+    public static List<JSONObject> getAllCable(JSONArray jsonArray) {
         List<JSONObject> list = new ArrayList<>();
-        if (null != objects1) {
-            int length = objects1.size();
+        if (null != jsonArray) {
+            int length = jsonArray.size();
             for (int i = 0; i < length; i++) {
-                list.add(objects1.getJSONObject(i));
+                list.add(jsonArray.getJSONObject(i));
             }
         }
         return list;
@@ -180,12 +178,11 @@ public class Util {
      * @param degree
      * @return
      */
-    public static double[] getOffset(double degree, double scale, JSONObject cable, int i, double length) {
+    public static double[] getOffset(double degree, double realScale, JSONObject cable, int i) {
         double realDegree = degree * Math.PI / 180;
         double tan = Math.tan(realDegree);
         double cos = Math.cos(realDegree);
         double sin = Math.sin(realDegree);
-        double realScale = (scale / length) * 12;
         double realLength = (i + 0.5) * realScale;
         double v;
         double x = 0;

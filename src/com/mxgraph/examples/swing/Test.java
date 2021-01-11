@@ -20,6 +20,7 @@ import org.w3c.dom.Document;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.List;
@@ -44,8 +45,8 @@ public class Test extends BasicGraphEditor {
     public Test(String appTitle, mxGraphComponent component, String path) {
         super(appTitle, component, path);
         final mxGraph graph = graphComponent.getGraph();
-        EditorPalette shapesPalette = insertPalette("绘图");
         addTreeToLibrary("线路", new TreePopupMenu());
+        EditorPalette shapesPalette = insertPalette("绘图");
         shapesPalette.addListener(mxEvent.SELECT, new mxIEventListener() {
             public void invoke(Object sender, mxEventObject evt) {
                 Object tmp = evt.getProperty("transferable");
@@ -253,6 +254,7 @@ public class Test extends BasicGraphEditor {
         mxSwingConstants.SHADOW_COLOR = Color.LIGHT_GRAY;
         mxConstants.W3C_SHADOWCOLOR = "#D3D3D3";
 
+        new TestUtils();
         // 创建窗口实例并添加基础内容
         editor = new Test("");
         // 添加菜单栏并展现窗口

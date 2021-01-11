@@ -1,7 +1,6 @@
 package com.mxgraph.examples.swing.editor;
 
-import com.mxgraph.examples.swing.MyPanel;
-import com.mxgraph.examples.swing.MyScrollPane;
+import com.mxgraph.examples.swing.JTabPanel;
 import com.mxgraph.examples.swing.MyTable;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.layout.*;
@@ -152,11 +151,11 @@ public class BasicGraphEditor extends JPanel {
         // Creates the outer split pane that contains the inner split pane and
         // the graph component on the right side of the window
 //        JSplitPane outer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inner, graphComponent);
-        JSplitPane mid = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inner, MyScrollPane.getMyScrollPane(path));
+        JSplitPane mid = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inner, new JTabPanel());
         mid.setDividerLocation(200);
         mid.setDividerSize(6);
         mid.setBorder(null);
-        JSplitPane outer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mid, MyTable.getMyTable(path));
+        JSplitPane outer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mid, new MyTable());
         outer.setOneTouchExpandable(true);
         outer.setDividerLocation(1000);
         outer.setDividerSize(6);

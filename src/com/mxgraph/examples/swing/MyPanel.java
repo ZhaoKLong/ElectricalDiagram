@@ -23,18 +23,23 @@ import static com.mxgraph.examples.swing.Util.*;
 
 public class MyPanel extends JPanel {
 
-    public static final int Margin = 20;
+    private static final int Margin = 20;
+    private static final int LineWidth = 1;
+    private static final int ImageSize = 16;
+    private static final int FontSize = 3;
+    private static final int LocalScale = 116987;
 
     private Dimension preferredSize = new Dimension(800 - 19, 600 - 42);
     private double[] localBorder;
     private double length;
     private double scale;
+    private JSONArray jsonArray;
 
-    public MyPanel(String path) {
+    public MyPanel(JSONArray jsonArray) {
         super();
+        this.jsonArray = jsonArray;
         setPreferredSize(preferredSize);
-        getLocalTxt(path);
-        localBorder = getLocalBorder();
+        localBorder = getLocalBorder(jsonArray);
         length = getLength(new double[]{localBorder[2], localBorder[0], localBorder[3], localBorder[1]});
         // mouse listener to detect scrollwheel events
         addMouseWheelListener(new MouseWheelListener() {
@@ -100,10 +105,10 @@ public class MyPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         // 设置画笔颜色
         g2d.setColor(Color.BLACK);
-        BasicStroke bs1 = new BasicStroke((int) (scale / length));       // 笔画的轮廓（画笔宽度/线宽为5px）
+        BasicStroke bs1 = new BasicStroke((int) ((scale * length * LineWidth) / (LocalScale * 800)));       // 笔画的轮廓（画笔宽度/线宽为5px）
         float[] dash = new float[]{5, 10};
         BasicStroke bs2 = new BasicStroke(
-                (int) (scale / length),                      // 画笔宽度/线宽
+                (int) ((scale * length * LineWidth) / (LocalScale * 800)),                      // 画笔宽度/线宽
                 BasicStroke.CAP_SQUARE,
                 BasicStroke.JOIN_MITER,
                 10.0f,
@@ -116,7 +121,7 @@ public class MyPanel extends JPanel {
         double xScale = (getWidth() - Margin * 2) / (localBorder[1] - localBorder[0]);
         double yScale = (getHeight() - Margin * 2 - 50) / (localBorder[3] - localBorder[2]);
         scale = Math.min(xScale, yScale);
-        List<JSONObject> allCable = getAllCable();
+        List<JSONObject> allCable = getAllCable(jsonArray);
         for (JSONObject cable : allCable) {
             if (null == cable.get("type")) {
                 //如果type==null 实线
@@ -148,7 +153,7 @@ public class MyPanel extends JPanel {
                     int type = (int) objectEquipment.getJSONObject(i).get("type");
                     filepath = getIconPath(type);
                     double degree = getDegree(Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0], localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude")), Double.parseDouble((String) cable.getJSONObject("next").get("longitude")) - localBorder[0], localBorder[3] - Double.parseDouble((String) cable.getJSONObject("next").get("latitude")));
-                    double[] offset = getOffset(degree, scale, cable, i, length);
+                    double[] offset = getOffset(degree, (scale * length * ImageSize) / (LocalScale * 800), cable, i);
                     // 绘制图片（如果宽高传的不是图片原本的宽高, 则图片将会适当缩放绘制）
                     drawImage(g2d, filepath, degree, (int) ((Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0]) * scale + Margin + offset[0]),
                             (int) ((localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude"))) * scale + Margin + offset[1]));
@@ -161,17 +166,17 @@ public class MyPanel extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
             // 设置字体样式, null 表示使用默认字体, Font.PLAIN 为普通样式, 大小为 25px
-            g2d.setFont(new Font(null, Font.PLAIN, (int) ((scale / length) * 2)));
+            g2d.setFont(new Font(null, Font.PLAIN, (int) ((scale * length * FontSize) / (LocalScale * 800))));
 
             // 绘制文本, 其中坐标参数指的是文本绘制后的 左下角 的位置
             // 首次绘制需要初始化字体, 可能需要较耗时
 
             //前点坐标名
-            g2d.drawString((String) cable.getJSONObject("prev").get("name"), (int) ((Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0]) * scale) + Margin + (int) ((scale / length) * 2),
-                    (int) ((localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude"))) * scale) + Margin + (int) (scale / length));
+            g2d.drawString((String) cable.getJSONObject("prev").get("name"), (int) ((Double.parseDouble((String) cable.getJSONObject("prev").get("longitude")) - localBorder[0]) * scale) + Margin + (int) ((scale * length * FontSize) / (LocalScale * 800) / 2),
+                    (int) ((localBorder[3] - Double.parseDouble((String) cable.getJSONObject("prev").get("latitude"))) * scale) + Margin + (int) ((scale * length * FontSize) / (LocalScale * 800)));
             //后点坐标名
-            g2d.drawString((String) cable.getJSONObject("next").get("name"), (int) ((Double.parseDouble((String) cable.getJSONObject("next").get("longitude")) - localBorder[0]) * scale) + Margin + (int) ((scale / length) * 2),
-                    (int) ((localBorder[3] - Double.parseDouble((String) cable.getJSONObject("next").get("latitude"))) * scale) + Margin + (int) (scale / length));
+            g2d.drawString((String) cable.getJSONObject("next").get("name"), (int) ((Double.parseDouble((String) cable.getJSONObject("next").get("longitude")) - localBorder[0]) * scale) + Margin + (int) ((scale * length * FontSize) / (LocalScale * 800) / 2),
+                    (int) ((localBorder[3] - Double.parseDouble((String) cable.getJSONObject("next").get("latitude"))) * scale) + Margin + (int) ((scale * length * FontSize) / (LocalScale * 800)));
         }
         // 自己创建的副本用完要销毁掉
         g2d.dispose();
@@ -185,9 +190,9 @@ public class MyPanel extends JPanel {
 
         // 从本地读取一张图片
         Image image = Toolkit.getDefaultToolkit().getImage(filepath);
-        BufferedImage bi = new BufferedImage(Math.min((int) ((scale / length) * 12), 1024), Math.min((int) ((scale / length) * 12), 1024), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bi = new BufferedImage(Math.min((int) ((scale * length * ImageSize) / (LocalScale * 800)), 1024), Math.min((int) ((scale * length * ImageSize) / (LocalScale * 800)), 1024), BufferedImage.TYPE_INT_ARGB);
         Graphics gg = bi.getGraphics();
-        gg.drawImage(image, 0, 0, Math.min((int) ((scale / length) * 12), 1024), Math.min((int) ((scale / length) * 12), 1024), this);
+        gg.drawImage(image, 0, 0, Math.min((int) ((scale * length * ImageSize) / (LocalScale * 800)), 1024), Math.min((int) ((scale * length * ImageSize) / (LocalScale * 800)), 1024), this);
         try {
             InputStream inputStream = ImageChange.rotateImg(bi, degree, null);
             BufferedImage read = ImageIO.read(inputStream);
