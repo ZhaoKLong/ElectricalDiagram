@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -42,6 +43,9 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import com.alibaba.fastjson.JSONArray;
+import com.mxgraph.entity.Trunkline;
+import com.mxgraph.util.*;
 import org.w3c.dom.Document;
 
 import com.mxgraph.analysis.mxDistanceCostFunction;
@@ -60,17 +64,13 @@ import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxConnectionHandler;
 import com.mxgraph.swing.util.mxGraphActions;
 import com.mxgraph.swing.view.mxCellEditor;
-import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxCellRenderer.CanvasFactory;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxDomUtils;
-import com.mxgraph.util.mxResources;
-import com.mxgraph.util.mxUtils;
-import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.util.png.mxPngEncodeParam;
 import com.mxgraph.util.png.mxPngImageEncoder;
 import com.mxgraph.util.png.mxPngTextDecoder;
 import com.mxgraph.view.mxGraph;
+
+import static com.mxgraph.util.TestUtils.getTrunklineList;
 
 /**
  *
@@ -412,6 +412,20 @@ public class EditorActions {
                     graphComponent.zoomAndCenter();
                 }
             }
+        }
+    }
+
+    @SuppressWarnings("serial")
+    public static class ExportExcelAction extends AbstractAction {
+        /**
+         *
+         */
+
+        public ExportExcelAction(String name, JSONArray jsonArray) {
+            excelUtil.simpleWrite(name, jsonArray);
+        }
+
+        public void actionPerformed(ActionEvent e) {
         }
     }
 

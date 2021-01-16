@@ -5,15 +5,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.AbstractAction;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.SwingUtilities;
-import javax.swing.TransferHandler;
-import javax.swing.UIManager;
+import javax.swing.*;
 
+import com.alibaba.fastjson.JSONArray;
 import com.mxgraph.analysis.StructuralException;
 import com.mxgraph.analysis.mxGraphProperties.GraphType;
 import com.mxgraph.analysis.mxAnalysisGraph;
@@ -21,6 +17,7 @@ import com.mxgraph.analysis.mxGraphProperties;
 import com.mxgraph.analysis.mxGraphStructure;
 import com.mxgraph.analysis.mxTraversal;
 import com.mxgraph.costfunction.mxCostFunction;
+import com.mxgraph.entity.Trunkline;
 import com.mxgraph.examples.swing.editor.EditorActions.AlignCellsAction;
 import com.mxgraph.examples.swing.editor.EditorActions.AutosizeAction;
 import com.mxgraph.examples.swing.editor.EditorActions.BackgroundAction;
@@ -36,6 +33,7 @@ import com.mxgraph.examples.swing.editor.EditorActions.NewAction;
 import com.mxgraph.examples.swing.editor.EditorActions.OpenAction;
 import com.mxgraph.examples.swing.editor.EditorActions.PageBackgroundAction;
 import com.mxgraph.examples.swing.editor.EditorActions.PageSetupAction;
+import com.mxgraph.examples.swing.editor.EditorActions.ExportExcelAction;
 import com.mxgraph.examples.swing.editor.EditorActions.PrintAction;
 import com.mxgraph.examples.swing.editor.EditorActions.PromptPropertyAction;
 import com.mxgraph.examples.swing.editor.EditorActions.PromptValueAction;
@@ -65,6 +63,8 @@ import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxResources;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxGraphView;
+
+import static com.mxgraph.util.TestUtils.getTrunklineList;
 
 public class EditorMenuBar extends JMenuBar {
 
@@ -99,6 +99,21 @@ public class EditorMenuBar extends JMenuBar {
 
         menu.addSeparator();
 
+//        menu.add(editor.bind(mxResources.get("exportExcel"), new ExportExcelAction(), "/com/mxgraph/examples/swing/images/pagesetup.gif"));
+        submenu = (JMenu) menu.add(new JMenu(mxResources.get("exportExcel")));
+        submenu.setIcon(new ImageIcon("/com/mxgraph/examples/swing/images/pagesetup.gif"));
+        List<Trunkline> trunklineList = getTrunklineList();
+        if (trunklineList.size() != 0) {
+            for (Trunkline trunkline : trunklineList) {
+                JSONArray jsonArray = trunkline.getData();
+                if (null != trunkline.getChildren() && trunkline.getChildren().size() != 0) {
+                    for (Trunkline trunklineChild : trunkline.getChildren()) {
+                        jsonArray.addAll(trunklineChild.getData());
+                    }
+                }
+                submenu.add(editor.bind(trunkline.getName(), new ExportExcelAction(trunkline.getName(), jsonArray)));
+            }
+        }
         menu.add(editor.bind(mxResources.get("pageSetup"), new PageSetupAction(), "/com/mxgraph/examples/swing/images/pagesetup.gif"));
         menu.add(editor.bind(mxResources.get("print"), new PrintAction(), "/com/mxgraph/examples/swing/images/print.gif"));
 

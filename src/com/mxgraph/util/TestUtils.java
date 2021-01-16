@@ -168,4 +168,20 @@ public class TestUtils {
     public void updateDate() {
         //TODO
     }
+
+    /**
+     * object转double
+     *
+     * @param object
+     * @return
+     */
+    public static double objectToDouble(Object object) {
+        double data = 0;
+        if (object.getClass() == Integer.class) {
+            data += ((Integer) object).doubleValue();
+        } else {
+            data += (Double) object;
+        }
+        return data;
+    }
 }
